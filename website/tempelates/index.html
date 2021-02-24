@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static "css/homepage.css" %}" />
+    <title>Home Page</title>
+</head>
+
+<body>
+    <div id="database">
+        <h1 id="DatabaseHeading">Data collected from Raspberry Pi</h1>
+        <table border="1" , cellspacing="5" , cellpadding="5">
+            <td>SN</td>
+            <td>Date</td>
+            <td>Time</td>
+            <td>Temperature</td>
+            <td>Humidity</td>
+            <td>Pressure</td>
+            <td>Dust</td>
+            <td>Uv Ray</td>
+            {% for i in data %}
+            <tr>
+                <td>{{i.SN}}</td>
+                <td>{{i.Date}}</td>
+                <td>{{i.Time}}</td>
+                <td>{{i.Temperature}}</td>
+                <td>{{i.Humidity}}</td>
+                <td>{{i.DustDensity}}</td>
+                <td>{{i.Pressure}}</td>
+                <td>{{i.Humidity}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div id="live">
+        <h1 id="liveheading">Live data from Raspberry Pi</h1>
+        <p id="Temperature"> Temperature: {{temperature}}</p>
+        <p id="Humidity"> Humidity: {{humidity}}</p>
+        <p id="Pressure"> Pressure: {{pressure}}</p>
+        <p id="Dust"> Dust PM: {{dust}}</p>
+        <p id="UV"> UV rays: {{uv}}</p>
+    </div>
+
+    <div id="prediction">
+        <h1 id="predheading">Prediction from test dataset</h1>
+        <form method="POST">
+            {% csrf_token %}
+            Input: <input type="text" , name="inputs" , placeholder="Enter the test data">
+            <button type="submit">Submit</button>
+        </form>
+        <p id="actualMax">Actual Max Temperature:{{MaxTemperature}}</p>
+        <p id="predMax">Prediction Max Temperature:{{MaxPred}}</p>
+        <p id="actualMin">Actual Max Temperature:{{MinTemperature}}</p>
+        <p id="predMin">Prediction Max Temperature:{{MinPred}}</p>
+
+    </div>
+
+</body>
+
+</html>
