@@ -1,4 +1,4 @@
-SN,Date,Time,Temperature,Humidity,DustDensity,Pressure
+SN,Date,Time,Temperature,Humidity,DustDensity,Pressur,Uv
 1, 2021-02-23, 13:47:00, 21.0, 34.0, 0.00, 867.33
 2, 2021-02-23, 13:47:10, 21.0, 34.0, 0.00, 867.29
 3, 2021-02-23, 13:47:16, 21.0, 34.0, 0.00, 867.41
