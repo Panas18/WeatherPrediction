@@ -29,9 +29,9 @@
                 <td>{{i.Time}}</td>
                 <td>{{i.Temperature}}</td>
                 <td>{{i.Humidity}}</td>
+                <td>{{i.Pressur}}</td>
                 <td>{{i.DustDensity}}</td>
-                <td>{{i.Pressure}}</td>
-                <td>{{i.Humidity}}</td>
+                <td>{{i.Uv}}</td>
             </tr>
             {% endfor %}
         </table>
@@ -56,7 +56,8 @@
         <p id="predMax">Prediction Max Temperature:{{MaxPred}}</p>
         <p id="actualMin">Actual Min Temperature:{{MinTemperature}}</p>
         <p id="predMin">Prediction Min Temperature:{{MinPred}}</p>
-        <img src="{% static "images/Max.png" %}" alt="">
+        <img src="{% static "images/Max.png" %}" alt="Temperature">
+        <h4>Graph: Actual vs Preciction Maximum temperature of Test data</h4>
     </div>
 
 </body>

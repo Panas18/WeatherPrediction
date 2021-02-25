@@ -17,6 +17,7 @@ PREDICTION_DIR = os.path.join(MAIN_DIR, "machineLearning")
 sys.path.insert(1,RASPBERRY_DIR)
 sys.path.insert(2, PREDICTION_DIR)
 
+#import main
 data_path = os.path.join(RASPBERRY_DIR,"data.csv")
 
 #loading max and min models
@@ -58,8 +59,6 @@ def pred_min(data): #predicts min temperature from test dataset
     return round(pred_temperature[0], 2), actual_temperature
 
 
-
-
 # Create your views here.
 def index(request):
     database = pd.read_csv(data_path)
@@ -69,13 +68,13 @@ def index(request):
     pred_max_temp, actual_max_temp=pred_max(int(data))
     pred_min_temp, actual_min_temp = pred_min(int(data))
  
-    
+    #humidity , temperature, dustDensity,pressure = main.data()
     all_data =[]
     for i in range(database.shape[0]):
         temp = database.iloc[i]
         all_data.append(dict(temp))
         
-    context={"data": all_data[database.shape[0]-15:],
+    context={"data": all_data[database.shape[0]-16:],
             "temperature": "20 C",
             "humidity": "59%",
             "pressure": "120 hPa",
