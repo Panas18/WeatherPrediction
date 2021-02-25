@@ -12,7 +12,7 @@
 
 <body>
     <div id="database">
-        <h1 id="DatabaseHeading">Data collected from Raspberry Pi</h1>
+        <h1 >Data collected from Raspberry Pi</h1>
         <table border="1" , cellspacing="5" , cellpadding="5">
             <td>SN</td>
             <td>Date</td>
@@ -37,7 +37,7 @@
         </table>
     </div>
     <div id="live">
-        <h1 id="liveheading">Live data from Raspberry Pi</h1>
+        <h1>Live data from Raspberry Pi</h1>
         <p id="Temperature"> Temperature: {{temperature}}</p>
         <p id="Humidity"> Humidity: {{humidity}}</p>
         <p id="Pressure"> Pressure: {{pressure}}</p>
@@ -46,7 +46,7 @@
     </div>
 
     <div id="prediction">
-        <h1 id="predheading">Prediction from test dataset</h1>
+        <h1 >Prediction from test dataset</h1>
         <form method="POST">
             {% csrf_token %}
             Input: <input type="text" , name="inputs" , placeholder="Enter the test data">
@@ -55,10 +55,12 @@
         <p id="actualMax">Actual Max Temperature:{{MaxTemperature}}</p>
         <p id="predMax">Prediction Max Temperature:{{MaxPred}}</p>
         <p id="actualMin">Actual Min Temperature:{{MinTemperature}}</p>
-        <p id="predMin">Prediction Min Temperature:{{MinPred}}</p>
+        <p id="predMin">Prediction Min Temperature:{{MinPred}}</p> 
         <img src="{% static "images/Max.png" %}" alt="Temperature" width=640>
-        <h4>Graph: Actual vs Preciction Maximum temperature of Test data git </h4>
+        <h3>Graph: Actual and Predcted max temperature of test data</h3>
     </div>
+    
+
 
 </body>
 
