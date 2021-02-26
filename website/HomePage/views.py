@@ -17,7 +17,7 @@ PREDICTION_DIR = os.path.join(MAIN_DIR, "machineLearning")
 sys.path.insert(1,RASPBERRY_DIR)
 sys.path.insert(2, PREDICTION_DIR)
 
-#import main
+import main
 data_path = os.path.join(RASPBERRY_DIR,"data.csv")
 
 #loading max and min models
@@ -68,17 +68,22 @@ def index(request):
     pred_max_temp, actual_max_temp=pred_max(int(data))
     pred_min_temp, actual_min_temp = pred_min(int(data))
  
-    #humidity , temperature, dustDensity,pressure = main.data()
+    humidity , temperature, dustDensity,pressure = main.data()
+    humidity = str(humidity) + " %"
+    temperature = str(temperature) + " C"
+    dustDensity = str(dustDensity) + " mW/cm^2"
+    pressure = str(pressure) + " hPa"
+
     all_data =[]
     for i in range(database.shape[0]):
         temp = database.iloc[i]
         all_data.append(dict(temp))
         
     context={"data": all_data[database.shape[0]-16:],
-            "temperature": "20 C",
-            "humidity": "59%",
-            "pressure": "120 hPa",
-            "dust": "390 ug/m^3",
+            "temperature": temperature,
+            "humidity": humidity,
+            "pressure": pressure,
+            "dust": dustDensity,
             "uv": "210 mW/cm^2",
             "MaxTemperature":actual_max_temp,
             "MaxPred": pred_max_temp,
