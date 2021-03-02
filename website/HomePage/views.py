@@ -6,91 +6,81 @@ import pandas as pd
 import joblib
 
 
-#Directory of base and main project folder
+# Directory of base and main project folder
 BASE_DIR = Path(__file__).resolve().parent.parent
 MAIN_DIR = Path(__file__).resolve().parent.parent.parent
 
 
-#Adding path of raspberry  code and machine learning to python
+# Adding path of raspberry  code and machine learning to python
 RASPBERRY_DIR = os.path.join(MAIN_DIR, "RaspberryHardware")
-PREDICTION_DIR = os.path.join(MAIN_DIR, "machineLearning")
-sys.path.insert(1,RASPBERRY_DIR)
+PREDICTION_DIR = os.path.join(MAIN_DIR, "machineLearning", "FinalProj")
+PRED_DATA_DIR = os.path.join(PREDICTION_DIR, "Datasets")
+sys.path.insert(1, RASPBERRY_DIR)
 sys.path.insert(2, PREDICTION_DIR)
+sys.path.insert(3, PRED_DATA_DIR)
 
-import main
-data_path = os.path.join(RASPBERRY_DIR,"data.csv")
+# import main
 
-#loading max and min models
-max_model_dir = os.path.join(PREDICTION_DIR, "maxModel.sav")
-min_model_dir = os.path.join(PREDICTION_DIR, "minModel.sav")
-max_model = joblib.load(max_model_dir)
-min_model = joblib.load(min_model_dir)
+data_path = os.path.join(RASPBERRY_DIR, "data.csv")
 
+# loading max and min models
+#max_model_dir = os.path.join(PREDICTION_DIR, "maxModel.sav")
+#min_model_dir = os.path.join(PREDICTION_DIR, "minModel.sav")
+max_model = joblib.load(os.path.join(PREDICTION_DIR, "maxModel.sav"))
+min_model = joblib.load(os.path.join(PREDICTION_DIR, "minModel.sav"))
 
-#Test data path
-max_testX_dir = os.path.join(PREDICTION_DIR,"maxData","testx.csv")
-max_testY_dir = os.path.join(PREDICTION_DIR,"maxData","testy.csv")
-
-min_testX_dir = os.path.join(PREDICTION_DIR,"minData","testx.csv")
-min_testy_dir = os.path.join(PREDICTION_DIR,"minData","testy.csv")
+max_pred = pd.read_csv(os.path.join(PRED_DATA_DIR, "MaxPrediction.csv"), index_col=0)
+min_pred = pd.read_csv(os.path.join(PRED_DATA_DIR, "MinPrediction.csv"), index_col=0)
 
 
-x_max = pd.read_csv(max_testX_dir, index_col = 0)
-y_max = pd.read_csv(max_testY_dir, index_col = 0)
-y_max = y_max.to_numpy().ravel()
-x_max = x_max.to_numpy()
+def test_pred(index):
+    actual_max, pred_max = max_pred.iloc[index]
+    actual_min, pred_min = min_pred.iloc[index]
+    return actual_max, actual_min, round(pred_max, 1), round(pred_min, 1)
 
-x_min = pd.read_csv(min_testX_dir, index_col = 0)
-y_min = pd.read_csv(min_testy_dir, index_col = 0)
-y_min = y_min.to_numpy().ravel()
-x_min = x_min.to_numpy()
-
-
-def pred_max(data): #predicts max temperature from test data set
-    input_data = x_max[data].reshape(1,-1)
-    pred_temperature = max_model.predict(input_data)
-    actual_temperature = y_max[data]
-    return round(pred_temperature[0], 2), actual_temperature
-
-def pred_min(data): #predicts min temperature from test dataset
-    input_data = x_min[data].reshape(1,-1)
-    pred_temperature = min_model.predict(input_data)
-    actual_temperature = y_min[data]
-    return round(pred_temperature[0], 2), actual_temperature
-
+def pred_tomorrow(data):
+    max_temp = max_model.predict(data)
+    min_temp = min_model.predict(data)
+    return round(max_temp[0], 1), round(min_temp[0], 1)
 
 # Create your views here.
 def index(request):
+    temp_data = [25,24,24,23,23,11,14,13,11,10]
     database = pd.read_csv(data_path)
-    data=request.POST.get("inputs")
+    data = request.POST.get("inputs")
     if data is None:
         data = 10
-    pred_max_temp, actual_max_temp=pred_max(int(data))
-    pred_min_temp, actual_min_temp = pred_min(int(data))
- 
-    humidity , temperature, dustDensity,pressure = main.data()
-    humidity = str(humidity) + " %"
-    temperature = str(temperature) + " C"
-    dustDensity = str(dustDensity) + " mW/cm^2"
-    pressure = str(pressure) + " hPa"
+    actual_max, actual_min, pred_max, pred_min = test_pred(int(data))
+    tomorrow_max, tomorrow_min = pred_tomorrow(temp_data)
 
-    all_data =[]
+    # humidity, temperature, dustDensity, pressure = main.data()
+    # humidity = str(humidity) + " %"
+    # temperature = str(temperature) + " C"
+    # dustDensity = str(dustDensity) + " mW/cm^2"
+    # pressure = str(pressure) + " hPa"
+    humidity = 90
+    temperature = 18
+    dustDensity = 89
+    pressure = 1000
+
+    all_data = []
     for i in range(database.shape[0]):
         temp = database.iloc[i]
         all_data.append(dict(temp))
-        
-    context={"data": all_data[database.shape[0]-16:],
-            "temperature": temperature,
-            "humidity": humidity,
-            "pressure": pressure,
-            "dust": dustDensity,
-            "uv": "210 mW/cm^2",
-            "MaxTemperature":actual_max_temp,
-            "MaxPred": pred_max_temp,
-            "MinTemperature":actual_min_temp,
-            "MinPred": pred_min_temp,
-        }
-    
-    return render(request,"index.html",context )
 
+    context = {
+        "data": all_data[database.shape[0] - 16 :],
+        "temperature": temperature,
+        "humidity": humidity,
+        "pressure": pressure,
+        "dust": dustDensity,
+        "uv": "210",
+        "MaxTemperature": actual_max,
+        "MaxPred": pred_max,
+        "MinTemperature": actual_min,
+        "MinPred": pred_min,
+        "MaxTomorrow": tomorrow_max,
+        "MinTomorrow": tomorrow_min
+    }
 
+    return render(request, "index.html", context)
