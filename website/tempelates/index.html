@@ -1,19 +1,18 @@
-<!DOCTYPE html>
-{% load static %}
+<!DOCTYPE html> {% load static %}
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static "css/homepage.css" %}" />
+    <link rel="stylesheet" href="{% static  "css/homepage.css" %}" />
     <title>Home Page</title>
 </head>
 
 <body>
     <div id="database">
-        <h1 >Data collected from Raspberry Pi</h1>
-        <table border="1" , cellspacing="5" , cellpadding="5">
+        <h1>Data collected from Raspberry Pi</h1>
+        <table border="1" , cellspacing="5px" , cellpadding="5px">
             <td>SN</td>
             <td>Date</td>
             <td>Time</td>
@@ -38,29 +37,30 @@
     </div>
     <div id="live">
         <h1>Live data from Raspberry Pi</h1>
-        <p id="Temperature"> Temperature: {{temperature}}</p>
-        <p id="Humidity"> Humidity: {{humidity}}</p>
-        <p id="Pressure"> Pressure: {{pressure}}</p>
-        <p id="Dust"> Dust PM: {{dust}}</p>
-        <p id="UV"> UV rays: {{uv}}</p>
+        <p id="Temperature"> Temperature: {{temperature}} C</p>
+        <p id="Humidity"> Humidity: {{humidity}} %</p>2
+        <p id="Pressure"> Pressure: {{pressure}} hPa</p>
+        <p id="Dust"> Dust PM: {{dust}} ug/m^3</p>
+        <p id="UV"> UV rays: {{uv}} mw/cm^2</p>
     </div>
 
     <div id="prediction">
-        <h1 >Prediction from test dataset</h1>
+        <h1>Prediction from test dataset </h1>
         <form method="POST">
-            {% csrf_token %}
-            Input: <input type="text" , name="inputs" , placeholder="Enter the test data">
+            {% csrf_token %} Input: <input type="text" , name="inputs" , placeholder="Enter test data [0-671]">
             <button type="submit">Submit</button>
         </form>
-        <p id="actualMax">Actual Max Temperature:{{MaxTemperature}}</p>
-        <p id="predMax">Prediction Max Temperature:{{MaxPred}}</p>
-        <p id="actualMin">Actual Min Temperature:{{MinTemperature}}</p>
-        <p id="predMin">Prediction Min Temperature:{{MinPred}}</p> 
-        <img src="{% static "images/Max.png" %}" alt="Temperature" width=640>
-        <h3>Graph: Actual and Predcted max temperature of test data</h3>
+        <p id="actualMax">Actual Max Temperature: {{MaxTemperature}} C</p>
+        <p id="predMax">Prediction Max Temperature: {{MaxPred}} C</p>
+        <p id="actualMin">Actual Min Temperature: {{MinTemperature}} C</p>
+        <p id="predMin">Prediction Min Temperature: {{MinPred}} C</p>
     </div>
-    
 
+    <div id="tomorrow_pred">
+        <h1>Next day prediction</h1>
+        <p id = "MaxNext"> Tomorrow's Max Temperature: {{MaxTomorrow}} C</p>
+        <p id=MinNext>Tomorrow's Min Temperature: {{MinTomorrow}} C</p>
+    </div>
 
 </body>
 
