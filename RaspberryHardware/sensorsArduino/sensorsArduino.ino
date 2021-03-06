@@ -1,14 +1,14 @@
 #include <Adafruit_BMP085.h>
 
-//Adafruit_BMP085 bmp;
+Adafruit_BMP085 bmp;
 
 //Dust Sensor
 int measurePin = A0;
 int ledPower = 7;
 
 // Uv ray sensor
-//int UVOUT = A1; //Output from the sensor
-//int REF_3V3 = A2;
+int UVOUT = A1; //Output from the sensor
+int REF_3V3 = A2;
 
 unsigned int samplingTime = 280;
 unsigned int deltaTime = 40;
@@ -22,12 +22,12 @@ void setup()
 {
   Serial.begin(9600);
   pinMode(ledPower, OUTPUT);
-  //while (!bmp.begin())
-  //{
-  // Serial.println("Bmp180 sensor not found");
-  //delay(5000);
-  //pinMode(UVOUT, INPUT);
-  //pinMode(REF_3V3, INPUT);2
+  while (!bmp.begin())
+  {
+   Serial.println("Bmp180 sensor not found");
+  delay(5000);
+  pinMode(UVOUT, INPUT);
+  pinMode(REF_3V3, INPUT);2
 }
 
 
@@ -48,8 +48,8 @@ String dust_sensor()
   delayMicroseconds(deltaTime);
   digitalWrite(ledPower, HIGH);
   delayMicroseconds(sleepTime);
-  Serial.print("calculated Voltage: ");
-  Serial.println(calcVoltage);
+  //Serial.print("calculated Voltage: ");
+  //Serial.println(calcVoltage);
 
   calcVoltage = voMeasured * (5.0 / 1024);
   if (calcVoltage < 3.5)
@@ -65,19 +65,44 @@ String dust_sensor()
   return String(dustDensity);
 }
 
-//String pressure_sensor()
-//{
-  //float pressure = bmp.readPressure();
- // pressure = pressure / 100;
- // return String(pressure)
-//}
+String pressure_sensor()
+{
+  float pressure = bmp.readPressure();
+  pressure = pressure / 100;
+  return String(pressure)
+}
+
+string Uv_sensor(){
+  int uvLevel = averageAnalogRead(UVOUT);
+  int refLevel = averageAnalogRead(REF_3V3);
+  float outputVoltage = 3.3 / refLevel * uvLevel;
+  float uvIntensity = mapfloat(outputVoltage, 0.99, 2.8, 0.0, 15.0);
+  //Serial.print("output: ");
+  //Serial.print(refLevel);
+
+  //Serial.print("ML8511 output: ");
+  //Serial.print(uvLevel);
+
+  //Serial.print(" / ML8511 voltage: ");
+  //Serial.print(outputVoltage);
+
+  //Serial.print(" / UV Intensity (mW/cm^2): ");
+  //Serial.print(uvIntensity);
+  delay(100);
+  return_string = String(uvIntensity)
+ 
+}
 
 void loop()
 {
   String dust_density = dust_sensor();
-  //String pressure = pressure_sensor();
+  String pressure = pressure_sensor();
+  String uv_intensity= Uv_sensor();
 
-//  String return_message = dust_density + "-" + pressure;
+  String return_message = dust_density + "-" + pressure +"-"+uv_intensity ;
+  Serial.println(return_message)
   //Serial.println(return_message);
-  Serial.println(dust_density);
+  //Serial.println(dust_density);
+  //Serial.println(uv_intensity);
 }
+

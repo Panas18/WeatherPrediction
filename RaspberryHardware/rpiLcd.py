@@ -19,3 +19,7 @@ def clearLcd(time):
     lcd.clear()
     sleep(time)
 
+if __name__ =="__main__":
+    while True:
+        displayLcd("Hello world \n Hello again")
+        sleep(1)

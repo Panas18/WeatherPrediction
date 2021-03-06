@@ -7,5 +7,6 @@ def dthData():
 
 if __name__ =="__main__":
     while True:
+        print("Reading temperarure...")
         humidity, temperature = dthData()
         print(f"Humidity = {humidity}, Temperature = {temperature}")
