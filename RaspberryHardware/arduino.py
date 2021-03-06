@@ -24,6 +24,13 @@ if __name__ == "__main__":
     while True:
         # dust,pressure = data()
         # print(dust, pressure, uv_intensity)
+        uv=None
+        pressure=None
+        dust=None
+        data_list = [uv, pressure, dust]
         param_list =data()
-        for val in param_list:
-            print(val)
+        for i in range(len(param_list)):
+            data_list[i] = param_list[i]
+            print(data_list[i])
+            print("\n")
+            

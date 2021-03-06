@@ -19,7 +19,7 @@ sys.path.insert(1, RASPBERRY_DIR)
 sys.path.insert(2, PREDICTION_DIR)
 sys.path.insert(3, PRED_DATA_DIR)
 
-# import main
+import main
 
 data_path = os.path.join(RASPBERRY_DIR, "data.csv")
 
@@ -53,15 +53,16 @@ def index(request):
     actual_max, actual_min, pred_max, pred_min = test_pred(int(data))
     tomorrow_max, tomorrow_min = pred_tomorrow(temp_data)
 
-    # humidity, temperature, dustDensity, pressure = main.data()
-    # humidity = str(humidity) + " %"
-    # temperature = str(temperature) + " C"
-    # dustDensity = str(dustDensity) + " mW/cm^2"
-    # pressure = str(pressure) + " hPa"
-    humidity = 90
-    temperature = 18
-    dustDensity = 89
-    pressure = 1000
+    humidity, temperature, dustDensity, pressure, uv = main.data_total()
+    humidity = str(humidity) + " %"
+    temperature = str(temperature) + " C"
+    DustDensity = str(dustDensity) + " mg/cm^2"
+    pressure = str(pressure) + " hPa"
+    Uv = str(uv)+ "mw/cm^2"
+#humidity = 90
+    #temperature = 18
+    #dustDensity = 89
+    #pressure = 1000
 
     all_data = []
     for i in range(database.shape[0]):
@@ -73,8 +74,8 @@ def index(request):
         "temperature": temperature,
         "humidity": humidity,
         "pressure": pressure,
-        "dust": dustDensity,
-        "uv": "210",
+        "DustDensity": dustDensity,
+        "Uv": uv_density,
         "MaxTemperature": actual_max,
         "MaxPred": pred_max,
         "MinTemperature": actual_min,
