@@ -75,7 +75,7 @@ def index(request):
         "humidity": humidity,
         "pressure": pressure,
         "DustDensity": dustDensity,
-        "Uv": uv_density,
+        "Uv": Uv,
         "MaxTemperature": actual_max,
         "MaxPred": pred_max,
         "MinTemperature": actual_min,

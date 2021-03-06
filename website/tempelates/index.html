@@ -19,8 +19,8 @@
             <td>Temperature</td>
             <td>Humidity</td>
             <td>Pressure</td>
-            <td>Dust</td>
-            <td>Uv Ray</td>
+            <td>Dust_density</td>
+            <td>Uv_Ray</td>
             {% for i in data %}
             <tr>
                 <td>{{i.SN}}</td>
@@ -29,8 +29,8 @@
                 <td>{{i.Temperature}}</td>
                 <td>{{i.Humidity}}</td>
                 <td>{{i.Pressure}}</td>
-                <td>{{i.DustDensity}}</td>
-                <td>{{i.Uv}}</td>
+                <td>{{i.Dust_density}}</td>
+                <td>{{i.uv_intensity}}</td>
             </tr>
             {% endfor %}
         </table>
